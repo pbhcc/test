@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "Logging.level.com.cy",
+  "type": "java.lang.String",
+  "description": "A description for 'Logging.level.com.cy'"
+}]}
