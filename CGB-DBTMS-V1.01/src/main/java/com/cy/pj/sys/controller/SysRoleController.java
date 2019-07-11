@@ -17,6 +17,11 @@ public class SysRoleController {
 	@Autowired
 	private SysRoleService sysRoleService;
 	
+	@RequestMapping("doFindObjectById")
+	public JsonResult doFindObjectById(Integer id) {
+		return new JsonResult(sysRoleService.findObjectById(id));
+	}
+	
 	@RequestMapping("doFindPageObjects")
 	public JsonResult doFindPageObjects(String name,Integer pageCurrent) {
 		PageObject<SysRole> pageObjects = sysRoleService.findPageObjects(name, pageCurrent);
