@@ -71,4 +71,20 @@ public class SysRoleServiceImpl implements SysRoleService {
 		return result;
 	}
 
+	@Override
+	public int updateObject(SysRole entity, Integer[] menuIds) {
+		if(entity==null)
+			throw new ServiceException("修改对象不能为空");
+		if(entity.getId()==null)
+			throw new ServiceException("对象id值不能为空");
+		if(StringUtils.isEmpty(entity.getName()==null))
+			throw new ServiceException("角色名不能为空");
+		if(menuIds==null||menuIds.length==0)
+			throw new ServiceException("必须为角色选择一个权限");
+		int row = sysRoleDao.updateObject(entity);
+		sysRoleMenuDao.deleteObjectsByRoleId(entity.getId());
+		sysRoleMenuDao.insertObjects(entity.getId(), menuIds);
+		return row;
+	}
+
 }

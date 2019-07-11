@@ -12,6 +12,9 @@ import com.cy.pj.sys.vo.SysRoleMenuVo;
 @Mapper
 public interface SysRoleDao {
 	
+	
+	int updateObject(SysRole entity);
+	
 	SysRoleMenuVo findObjectById(Integer id);
 	
 	List<SysRole> findPageObjects(

@@ -5,6 +5,8 @@ import com.cy.pj.sys.entity.SysRole;
 import com.cy.pj.sys.vo.SysRoleMenuVo;
 
 public interface SysRoleService {
+	int updateObject(SysRole entity,Integer[] menuIds);
+	
 	SysRoleMenuVo findObjectById(Integer id);
 	
 	PageObject<SysRole> findPageObjects(String name,Integer pageCurrent);

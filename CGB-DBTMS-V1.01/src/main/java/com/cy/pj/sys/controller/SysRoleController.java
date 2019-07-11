@@ -17,6 +17,12 @@ public class SysRoleController {
 	@Autowired
 	private SysRoleService sysRoleService;
 	
+	@RequestMapping("doUpdateObject")
+	public JsonResult doUpdateObject(SysRole entity,Integer[] menuIds) {
+		sysRoleService.updateObject(entity, menuIds);
+		return new JsonResult("update ok");
+	}
+	
 	@RequestMapping("doFindObjectById")
 	public JsonResult doFindObjectById(Integer id) {
 		return new JsonResult(sysRoleService.findObjectById(id));
