@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.cy.pj.common.exception.ServiceException;
+import com.cy.pj.common.vo.CheckBox;
 import com.cy.pj.common.vo.PageObject;
 import com.cy.pj.sys.dao.SysRoleDao;
 import com.cy.pj.sys.dao.SysRoleMenuDao;
@@ -85,6 +86,11 @@ public class SysRoleServiceImpl implements SysRoleService {
 		sysRoleMenuDao.deleteObjectsByRoleId(entity.getId());
 		sysRoleMenuDao.insertObjects(entity.getId(), menuIds);
 		return row;
+	}
+
+	@Override
+	public List<CheckBox> findObjects() {
+		return sysRoleDao.findObjects();
 	}
 
 }

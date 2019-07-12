@@ -16,6 +16,10 @@ import com.cy.pj.sys.service.SysRoleService;
 public class SysRoleController {
 	@Autowired
 	private SysRoleService sysRoleService;
+	@RequestMapping("doFindRoles")
+	public JsonResult doFindObjects() {
+		return new JsonResult(sysRoleService.findObjects());
+	}
 	
 	@RequestMapping("doUpdateObject")
 	public JsonResult doUpdateObject(SysRole entity,Integer[] menuIds) {

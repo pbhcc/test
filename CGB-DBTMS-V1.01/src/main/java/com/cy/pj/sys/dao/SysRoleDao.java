@@ -5,13 +5,16 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
+import com.cy.pj.common.vo.CheckBox;
 import com.cy.pj.sys.entity.SysRole;
 import com.cy.pj.sys.vo.SysRoleMenuVo;
 
 @Mapper
 public interface SysRoleDao {
-	
+	@Select("select id,name from sys_roles")
+	List<CheckBox> findObjects();
 	
 	int updateObject(SysRole entity);
 	

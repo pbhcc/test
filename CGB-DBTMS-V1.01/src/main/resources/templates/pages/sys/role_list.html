@@ -64,6 +64,7 @@
 	   var title;
 	   if($(this).hasClass('btn-add')){
 		   title="添加角色";
+		   $("#mainContentId").removeData();
 		   doLoadPageUI(title);
 	   }else{
 		   title="修改角色"
