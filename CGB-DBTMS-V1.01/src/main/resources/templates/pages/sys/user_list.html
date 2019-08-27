@@ -61,6 +61,7 @@
 	   var title;
 	   if($(this).hasClass("btn-add")){
 		   title="添加用户";
+		   $("#mainContentId").removeData();
 		   doLoadPage(title);
 	   }else if($(this).hasClass("btn-update")){
 		   title="修改用户";

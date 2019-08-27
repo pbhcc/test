@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.pj.sys.dao.SysMenuDao">
+
+	<select id="findPermissions" resultType="string">
+		select permission <!-- sys:user:update -->
+		from sys_menus
+		where id in
+		<foreach collection="menuIds" open="(" close=")" separator=","
+			item="item">
+			#{item}
+		</foreach>
+	</select>
+
 	<select id="findObjects" resultType="map">
 		select c.*,p.name parentName
 		from sys_menus c left
@@ -12,7 +23,7 @@
 		resultType="com.cy.pj.common.vo.Node">
 		select id,name,parentId from sys_menus
 	</select>
-		
+
 	<insert id="insertObject"
 		parameterType="com.cy.pj.sys.entity.SysMenu">
 		insert into sys_menus
@@ -24,16 +35,16 @@
 
 	</insert>
 	<update id="updateObject">
-		update sys_menus 
-		   set
-           name=#{name},
-           type=#{type},
-           sort=#{sort},
-           url=#{url},
-           parentId=#{parentId},
-           permission=#{permission},
-           modifiedUser=#{modifiedUser},
-           modifiedTime=now()
-           where id=#{id}
+		update sys_menus
+		set
+		name=#{name},
+		type=#{type},
+		sort=#{sort},
+		url=#{url},
+		parentId=#{parentId},
+		permission=#{permission},
+		modifiedUser=#{modifiedUser},
+		modifiedTime=now()
+		where id=#{id}
 	</update>
 </mapper>

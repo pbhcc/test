@@ -9,6 +9,8 @@ import com.cy.pj.sys.entity.SysLog;
 @Mapper
 public interface SysLogDao {
 	
+	int insertObject(SysLog entity);
+	
 	 /**
 	  * 按照查询条件统计总记录数
 	  * @param username

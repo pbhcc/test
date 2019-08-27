@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <mapper namespace="com.cy.pj.sys.dao.SysRoleMenuDao">
-  <insert id="insertObjects">
-         insert into sys_role_menus
-         (role_id,menu_id)
-         values 
-         <foreach collection="menuIds" 
-                  separator=","
-                  item="item">
-              (#{roleId},#{item})
-         </foreach>
- </insert>
-  
-  </mapper>
+<mapper namespace="com.cy.pj.sys.dao.SysRoleMenuDao">
+	<select id="findMenuIdByRoleIds" resultType="int">
+		select menu_id from sys_role_menus
+		where id in
+		<foreach collection="roleIds" open="(" close=")" separator=","
+			item="roleId">
+			#{roleId}
+		</foreach>
+	</select>
+
+
+
+	<insert id="insertObjects">
+		insert into sys_role_menus
+		(role_id,menu_id)
+		values
+		<foreach collection="menuIds" separator="," item="item">
+			(#{roleId},#{item})
+		</foreach>
+	</insert>
+
+</mapper>

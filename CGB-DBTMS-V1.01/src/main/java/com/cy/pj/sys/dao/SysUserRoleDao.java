@@ -9,7 +9,9 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface SysUserRoleDao {
-	@Select("select role_id from sys_user_roles where user_id=#{id}")
+	
+	
+	@Select("select role_id from sys_user_roles where user_id=#{userId}")
 	List<Integer> findRoleIdsByUserId(Integer userId);
 	
 	int insertObjects(@Param("userId")Integer userId,@Param("roleIds")Integer[] roleIds);

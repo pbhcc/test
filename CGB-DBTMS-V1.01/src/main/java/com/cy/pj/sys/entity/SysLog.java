@@ -4,6 +4,7 @@ import java.util.Date;
 
 import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 /**
  * 借助此对象封装数据
  * 1)数据库中查询到的数据
@@ -16,6 +17,7 @@ import lombok.ToString;
  */
 @Data //SysLog类在编译时会自动生成set/get写到.class文件
 @ToString
+@Accessors(chain = true)//提供一个set链接
 public class SysLog implements Serializable{
 	private static final long serialVersionUID = -8427441809753041210L;
 	private Integer id;

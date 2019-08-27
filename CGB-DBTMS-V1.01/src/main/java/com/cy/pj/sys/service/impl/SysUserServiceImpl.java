@@ -5,11 +5,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.cy.pj.common.annotation.RequiredLog;
 import com.cy.pj.common.exception.ServiceException;
 import com.cy.pj.common.vo.PageObject;
 import com.cy.pj.sys.dao.SysUserDao;
@@ -42,6 +47,8 @@ public class SysUserServiceImpl implements SysUserService{
 		//5.封装数据
 		return new PageObject<>(pageCurrent, pageSize, rowCount, records);
 	}
+	@RequiredLog("禁用启用")
+	@RequiresPermissions("sys:user:valid")
 	@Override
 	public int validById(Integer id, Integer valid, String modifiedUser) {
 		//1.合法性验证
@@ -66,6 +73,7 @@ public class SysUserServiceImpl implements SysUserService{
 				return rows;
 
 	}
+	@Transactional
 	@Override
 	public int saveObject(SysUser entity, Integer[] roleIds) {
 		//1.验证数据合法性
@@ -87,13 +95,17 @@ public class SysUserServiceImpl implements SysUserService{
 				entity.setPassword(sHash.toHex());
 
 				int rows=sysUserDao.insertObject(entity);
-			    sysUserRoleDao.insertObjects(
+			    int userRoleRows = sysUserRoleDao.insertObjects(
 						entity.getId(),
 						roleIds);//"1,2,3,4";
+		/*
+		 * if(userRoleRows>0) { throw new ServiceException("角色不匹配"); }
+		 */
 				//3.返回结果
 				return rows;
 
 	}
+	@Transactional
 	@Override
 	public Map<String, Object> findObjectById(Integer userId) {
 		//1.合法性验证
@@ -132,6 +144,32 @@ public class SysUserServiceImpl implements SysUserService{
 		//4.返回结果
 		return rows;
 
+	}
+	@Override
+	public int updatePassword(String password, String newPassword, String cfgPassword) {
+		//1.判定新密码与密码确认是否相同
+		if(StringUtils.isEmpty(newPassword))
+			throw new IllegalArgumentException("新密码不能为空");
+		if(StringUtils.isEmpty(cfgPassword))
+			throw new IllegalArgumentException("确认密码不能为空");
+		if(!newPassword.equals(cfgPassword))
+			throw new IllegalArgumentException("两次输入的密码不相等");
+		//2.判定原密码是否正确
+		if(StringUtils.isEmpty(password))
+			throw new IllegalArgumentException("原密码不能为空");
+		//获取登陆用户
+		SysUser user = (SysUser)SecurityUtils.getSubject().getPrincipal();
+		SimpleHash sh = new SimpleHash("MD5", password, user.getSalt(),1);
+		if(!user.getPassword().equals(sh.toHex()))
+			throw new IllegalArgumentException("原密码不正确");
+		//3.对新密码进行加密
+		String salt = UUID.randomUUID().toString();
+		sh = new SimpleHash("MD5", newPassword, salt, 1);
+		//4.将新密码加密以后的结果更新到数据库
+		int row = sysUserDao.updatePassword(sh.toHex(), salt, user.getId());
+		if(row==0)
+			throw new ServiceException("修改失败");
+		return row;
 	}
 
 }

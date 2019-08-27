@@ -1,16 +1,20 @@
 package com.cy.pj.sys.service.impl;
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.cy.pj.common.exception.ServiceException;
 import com.cy.pj.common.vo.PageObject;
 import com.cy.pj.sys.dao.SysLogDao;
 import com.cy.pj.sys.entity.SysLog;
 import com.cy.pj.sys.service.SysLogService;
-import com.cy.pj.sys.service.exception.ServiceException;
 
 import lombok.extern.slf4j.Slf4j;
 /**
@@ -55,6 +59,7 @@ public class SysLogServiceImpl implements SysLogService {
 	   //po.setPageCount((rowCount-1)/pageSize+1);
 		return new PageObject<>(pageCurrent, pageSize, rowCount, records);
 	}
+	@RequiresPermissions("sys:log:delete")
 	@Override
 	public int deleteObjects(Integer... ids) {
 		//验证参数合法
@@ -74,6 +79,15 @@ public class SysLogServiceImpl implements SysLogService {
 			throw new ServiceException("记录可能不存在");
 		}
 		//返回结果
+		return rows;
+	}
+	@Async("asyncThreadPool") //开启异步
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Override
+	public int insertObject(SysLog entity) {
+		log.info("log.current.thread="+Thread.currentThread().hashCode());
+		try {Thread.sleep(5000);} catch (Exception e) {}
+		int rows = sysLogDao.insertObject(entity);
 		return rows;
 	}
 }

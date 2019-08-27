@@ -8,6 +8,8 @@ import com.cy.pj.sys.vo.SysUserDeptVo;
 
 public interface SysUserService {
 	
+	int updatePassword(String password,String newPassword,String cfgPassword);
+	
 	int updateObject(SysUser entity,Integer[] roleIds);
 	
 	Map<String,Object> findObjectById(Integer userId);

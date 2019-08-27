@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cy.pj.common.exception.ServiceException;
@@ -17,6 +18,7 @@ import com.cy.pj.sys.service.SysMenuService;
 public class SysMenuServiceImpl implements SysMenuService{
 	@Autowired
 	private SysMenuDao sysMenuDao;
+	@Transactional
 	@Override
 	public List<Map<String, Object>> findObjects() {
 		List<Map<String, Object>> list = sysMenuDao.findObjects();
@@ -24,7 +26,7 @@ public class SysMenuServiceImpl implements SysMenuService{
 			throw new ServiceException("没有找到菜单记录");
 		
 		return list;
-	}
+	} 
 	@Override
 	public List<Node> findZtreeMenuNodes() {
 		return sysMenuDao.findZtreeMenuNodes();

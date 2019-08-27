@@ -4,6 +4,8 @@ import com.cy.pj.common.vo.PageObject;
 import com.cy.pj.sys.entity.SysLog;
 
 public interface SysLogService {
+	
+	int insertObject(SysLog entity);
 
 	/**
 	 * 基于当前页码值以及用户名查询当前页记录
